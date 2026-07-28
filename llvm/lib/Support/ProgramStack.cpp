@@ -10,6 +10,8 @@
 #include "llvm/Config/config.h"
 #include "llvm/Support/Compiler.h"
 
+#include <cstdlib>
+
 #ifdef LLVM_ON_UNIX
 # include <sys/resource.h> // for getrlimit
 #endif
