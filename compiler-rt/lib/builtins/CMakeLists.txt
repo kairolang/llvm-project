@@ -1003,6 +1003,15 @@ else ()
         list(APPEND ${arch}_SOURCES ${BF16_SOURCES})
       endif()
 
+      # Software int128 also makes the quad-float (tf) routines buildable on
+      # 32-bit targets: they need only __int128 and __float128
+      # (CRT_HAS_TF_MODE), and each source compiles to nothing on a target
+      # without __float128.
+      if (COMPILER_RT_ENABLE_SOFTWARE_INT128)
+        list(APPEND ${arch}_SOURCES ${GENERIC_TF_SOURCES})
+        list(REMOVE_DUPLICATES ${arch}_SOURCES)
+      endif()
+
       # Remove a generic C builtin when an arch-specific builtin is specified.
       filter_builtin_sources(${arch}_SOURCES ${arch})
 

@@ -148,6 +148,9 @@ void RISCVTargetInfo::getTargetDefines(const LangOptions &Opts,
   Builder.defineMacro("__riscv");
   bool Is64Bit = getTriple().isRISCV64();
   Builder.defineMacro("__riscv_xlen", Is64Bit ? "64" : "32");
+  // As X86 and AArch64 do: the macro is how code detects __float128.
+  if (HasFloat128)
+    Builder.defineMacro("__SIZEOF_FLOAT128__", "16");
   StringRef CodeModel = getTargetOpts().CodeModel;
   unsigned FLen = ISAInfo->getFLen();
   unsigned MinVLen = ISAInfo->getMinVLen();

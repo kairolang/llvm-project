@@ -49,6 +49,9 @@ public:
     MCountName = "_mcount";
     HasFloat16 = true;
     HasStrictFP = true;
+    // long double is already IEEE binary128 here; __float128 names the same
+    // fp128 type, as on AArch64 Linux. Kairo's f128 lowers to it.
+    HasFloat128 = true;
   }
 
   bool setCPU(const std::string &Name) override {

@@ -312,6 +312,15 @@ ARMTargetInfo::ARMTargetInfo(const llvm::Triple &Triple,
   // ARM has atomics up to 8 bytes
   setAtomic();
 
+  // __float128 as IEEE binary128 in fp128, through compiler-rt's tf
+  // libcalls (built with COMPILER_RT_ENABLE_SOFTWARE_INT128). GCC has no
+  // __float128 on ARM, so there is no ABI to match: the backend passes fp128
+  // like i128, in core registers and on the stack. Kairo's f128 lowers to
+  // it. Microsoft's mangler has no spelling for it, so MSVC targets stay
+  // without.
+  if (!Triple.isWindowsMSVCEnvironment())
+    HasFloat128 = true;
+
   // Maximum alignment for ARM NEON data types should be 64-bits (AAPCS)
   // as well the default alignment
   if (IsAAPCS && !Triple.isAndroid())
@@ -693,6 +702,10 @@ void ARMTargetInfo::getTargetDefines(const LangOptions &Opts,
   // Target identification.
   Builder.defineMacro("__arm");
   Builder.defineMacro("__arm__");
+  // As X86 and AArch64 do: the macro is how code (compiler-rt's
+  // int_types.h included) detects __float128.
+  if (HasFloat128)
+    Builder.defineMacro("__SIZEOF_FLOAT128__", "16");
   // For bare-metal none-eabi.
   if (getTriple().getOS() == llvm::Triple::UnknownOS &&
       (getTriple().getEnvironment() == llvm::Triple::EABI ||
