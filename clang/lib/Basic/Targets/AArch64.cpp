@@ -477,6 +477,11 @@ void AArch64TargetInfo::getTargetDefines(const LangOptions &Opts,
 
   Builder.defineMacro("__ARM_SIZEOF_MINIMAL_ENUM", Opts.ShortEnums ? "1" : "4");
 
+  // As X86 does: the macro is how code (compiler-rt's int_types.h included)
+  // detects __float128. Only Darwin sets HasFloat128 on AArch64.
+  if (HasFloat128)
+    Builder.defineMacro("__SIZEOF_FLOAT128__", "16");
+
   // Clang supports range prefetch intrinsics
   Builder.defineMacro("__ARM_PREFETCH_RANGE", "1");
 
@@ -1818,6 +1823,11 @@ DarwinAArch64TargetInfo::DarwinAArch64TargetInfo(const llvm::Triple &Triple,
 
   LongDoubleWidth = LongDoubleAlign = SuitableAlign = 64;
   LongDoubleFormat = &llvm::APFloat::IEEEdouble();
+
+  // __float128 is IEEE binary128 through fp128 libcalls, passed in q0/q1 as
+  // AArch64 Linux passes its long double. Kairo's f128 lowers to it.
+  if (!getTriple().isArch32Bit())
+    HasFloat128 = true;
 
   UseZeroLengthBitfieldAlignment = false;
 
