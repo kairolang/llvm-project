@@ -297,6 +297,13 @@ struct RuntimeLibcallSignatureTable {
     Table[RTLIB::FPROUND_F128_F16] = i16_func_i64_i64;
     Table[RTLIB::FPROUND_F128_F32] = f32_func_i64_i64;
     Table[RTLIB::FPROUND_F128_F64] = f64_func_i64_i64;
+    // bf16 is soft-promoted like f16, so it crosses calls as i16 the same
+    // way. FP_TO_BF16 is a LibCall on wasm, and getLibcallSignature has no
+    // fallback for an entry left unset.
+    Table[RTLIB::FPEXT_BF16_F32] = f32_func_i16;
+    Table[RTLIB::FPROUND_F32_BF16] = i16_func_f32;
+    Table[RTLIB::FPROUND_F64_BF16] = i16_func_f64;
+    Table[RTLIB::FPROUND_F128_BF16] = i16_func_i64_i64;
     Table[RTLIB::FPTOSINT_F32_I32] = i32_func_f32;
     Table[RTLIB::FPTOSINT_F32_I64] = i64_func_f32;
     Table[RTLIB::FPTOSINT_F32_I128] = i64_i64_func_f32;

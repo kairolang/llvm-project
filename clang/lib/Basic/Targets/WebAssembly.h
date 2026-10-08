@@ -88,6 +88,15 @@ public:
     SigAtomicType = SignedLong;
     LongDoubleWidth = LongDoubleAlign = 128;
     LongDoubleFormat = &llvm::APFloat::IEEEquad();
+    // _Float16 and __bf16 as storage types: arithmetic is done in float
+    // (no HasFastHalfType), and the backend promotes scalar f16/bf16 through
+    // compiler-rt's extend/trunc libcalls unless +fp16 makes f16 native.
+    // Kairo's f16 and bf16 lower to them, and Lib/builtin uses both on
+    // every target.
+    HasFloat16 = true;
+    HasBFloat16 = true;
+    BFloat16Width = BFloat16Align = 16;
+    BFloat16Format = &llvm::APFloat::BFloat();
     MaxAtomicPromoteWidth = MaxAtomicInlineWidth = 64;
     HasUnalignedAccess = true;
     if (T.isWALI()) {

@@ -149,9 +149,9 @@ AArch64TargetInfo::AArch64TargetInfo(const llvm::Triple &Triple,
 
   // __float128 is IEEE binary128 in fp128: the same type as long double on
   // AArch64 Linux and the BSDs, fp128 libcalls where long double is double
-  // (Darwin, MinGW). Kairo's f128 lowers to it. Microsoft's mangler has no
-  // spelling for it, so MSVC targets stay without.
-  if (Triple.isArch64Bit() && !Triple.isWindowsMSVCEnvironment())
+  // (Darwin, Windows). Kairo's f128 lowers to it. On MSVC targets the
+  // Microsoft mangler spells it as an artificial __clang struct.
+  if (Triple.isArch64Bit())
     HasFloat128 = true;
 
   if (Triple.isArch64Bit())

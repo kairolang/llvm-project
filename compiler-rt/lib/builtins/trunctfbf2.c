@@ -8,7 +8,10 @@
 #define QUAD_PRECISION
 #include "fp_lib.h"
 
-#if defined(CRT_HAS_TF_MODE) && defined(__x86_64__)
+// Any target with TF mode: nothing below is x86-specific, and the backends
+// of i686, RISC-V and others emit __trunctfbf2 for an f128 -> bf16 cast.
+// The file is only built where __bf16 exists (BF16_SOURCES).
+#if defined(CRT_HAS_TF_MODE)
 #define SRC_QUAD
 #define DST_BFLOAT
 #include "fp_trunc_impl.inc"

@@ -316,10 +316,9 @@ ARMTargetInfo::ARMTargetInfo(const llvm::Triple &Triple,
   // libcalls (built with COMPILER_RT_ENABLE_SOFTWARE_INT128). GCC has no
   // __float128 on ARM, so there is no ABI to match: the backend passes fp128
   // like i128, in core registers and on the stack. Kairo's f128 lowers to
-  // it. Microsoft's mangler has no spelling for it, so MSVC targets stay
-  // without.
-  if (!Triple.isWindowsMSVCEnvironment())
-    HasFloat128 = true;
+  // it. On MSVC targets the Microsoft mangler spells it as an artificial
+  // __clang struct.
+  HasFloat128 = true;
 
   // Maximum alignment for ARM NEON data types should be 64-bits (AAPCS)
   // as well the default alignment

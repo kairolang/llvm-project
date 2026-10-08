@@ -160,6 +160,17 @@ WebAssemblyTargetLowering::WebAssemblyTargetLowering(
     }
     setLoadExtAction(ISD::EXTLOAD, T, MVT::f16, Expand);
     setTruncStoreAction(T, MVT::f16, Expand);
+    // bf16 is storage-only here, soft-promoted like f16. Widening is exact (a
+    // 16-bit shift), so it expands inline. Narrowing goes to compiler-rt's
+    // __trunc{s,d}fbf2 rather than the generic expansion: that one truncates
+    // instead of rounding to nearest even, and would give different bits
+    // than x86 and AArch64 for the same Kairo bf16 code.
+    if (T == MVT::f32 || T == MVT::f64) {
+      setOperationAction(ISD::BF16_TO_FP, T, Expand);
+      setOperationAction(ISD::FP_TO_BF16, T, LibCall);
+      setLoadExtAction(ISD::EXTLOAD, T, MVT::bf16, Expand);
+      setTruncStoreAction(T, MVT::bf16, Expand);
+    }
   }
 
   // Expand unavailable integer operations.

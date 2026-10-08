@@ -2813,6 +2813,14 @@ void MicrosoftCXXNameMangler::mangleType(const BuiltinType *T, Qualifiers,
     mangleArtificialTagType(TagTypeKind::Struct, "__bf16", {"__clang"});
     break;
 
+  // MSVC has no IEEE binary128 type, so there is no spelling to match; spell
+  // it as _Float16 and __bf16 are, an artificial struct in the __clang
+  // namespace, which no real MSVC type can collide with. Kairo's f128 lowers
+  // to __float128 and needs it in signatures on MSVC targets.
+  case BuiltinType::Float128:
+    mangleArtificialTagType(TagTypeKind::Struct, "__float128", {"__clang"});
+    break;
+
   case BuiltinType::MFloat8:
     mangleArtificialTagType(TagTypeKind::Struct, "__mfp8", {"__clang"});
     break;

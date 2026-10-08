@@ -606,6 +606,11 @@ public:
       : WindowsX86_32TargetInfo(Triple, Opts) {
     LongDoubleWidth = LongDoubleAlign = 64;
     LongDoubleFormat = &llvm::APFloat::IEEEdouble();
+    // __float128 is IEEE binary128 through fp128 libcalls, passed as MinGW
+    // passes it. long double is double here, so this is the only quad type;
+    // Kairo's f128 lowers to it. The tf libcalls need compiler-rt built with
+    // COMPILER_RT_ENABLE_SOFTWARE_INT128, as on every 32-bit target.
+    HasFloat128 = true;
   }
 
   void getTargetDefines(const LangOptions &Opts,
@@ -932,6 +937,11 @@ public:
       : WindowsX86_64TargetInfo(Triple, Opts) {
     LongDoubleWidth = LongDoubleAlign = 64;
     LongDoubleFormat = &llvm::APFloat::IEEEdouble();
+    // __float128 is IEEE binary128 through fp128 libcalls. WinX86_64ABIInfo
+    // and CC_X86_Win64_C already treat it as MinGW does (by reference in,
+    // XMM0 out), so only the type was missing. long double is double here;
+    // Kairo's f128 lowers to it.
+    HasFloat128 = true;
   }
 
   void getTargetDefines(const LangOptions &Opts,

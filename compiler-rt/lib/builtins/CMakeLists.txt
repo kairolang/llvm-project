@@ -403,6 +403,13 @@ else () # MSVC
     x86_64/floatdidf.c
     x86_64/floatdisf.c
   )
+  # clang-cl has __int128 and (in this fork) __float128 on MSVC targets, so
+  # the quad-float (tf) libcalls f128 lowers to build here; cl.exe has
+  # neither and would compile them to nothing. CLANG_CL is only set by
+  # LLVM's own CheckCompilerVersion, so test the compiler ID directly.
+  if (CMAKE_C_COMPILER_ID MATCHES "Clang")
+    list(APPEND x86_64_SOURCES ${GENERIC_TF_SOURCES})
+  endif()
   set(i386_SOURCES ${GENERIC_SOURCES} ${x86_ARCH_SOURCES})
 endif () # if (NOT MSVC)
 
