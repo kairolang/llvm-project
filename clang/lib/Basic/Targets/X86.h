@@ -1021,6 +1021,10 @@ public:
     llvm::Triple T = llvm::Triple(Triple);
     if (T.isiOS())
       UseSignedCharForObjCBool = false;
+    // __float128 is IEEE binary128 through fp128 libcalls, passed in XMM per
+    // SysV as on x86_64 Linux. long double stays x87 (Kairo's f80). Kairo's
+    // f128 lowers to it.
+    HasFloat128 = true;
     resetDataLayout();
   }
 
