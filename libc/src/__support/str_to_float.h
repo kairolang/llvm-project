@@ -206,7 +206,7 @@ eisel_lemire<long double>(ExpandedFloat<long double> init_num,
   using FPBits = typename fputil::FPBits<long double>;
   using StorageType = typename FPBits::StorageType;
 
-  UInt128 mantissa = init_num.mantissa;
+  UInt128 mantissa = static_cast<UInt128>(init_num.mantissa);
   int32_t exp10 = init_num.exponent;
 
   // Exp10 Range
