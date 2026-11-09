@@ -421,9 +421,13 @@ public:
     return llvm::ArrayRef(NewABIRegAliases);
   }
 
-  bool hasInt128Type() const override {
-    return (ABI == "n32" || ABI == "n64") || getTargetOpts().ForceEnableInt128;
-  }
+  // __int128 on o32 too, what -fforce-enable-int128 gives (n32 and n64 have
+  // it natively). GCC has none on o32, so there is no ABI to match: the
+  // backend passes i128 in a0-a3 / on the stack and returns it through
+  // sret. Division and i128<->fp conversion are libcalls (__divti3, ...),
+  // which compiler-rt builds once __SIZEOF_INT128__ is defined. Kairo's
+  // i128 lowers to it.
+  bool hasInt128Type() const override { return true; }
 
   unsigned getUnwindWordWidth() const override;
 

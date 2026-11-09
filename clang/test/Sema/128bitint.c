@@ -1,5 +1,6 @@
 // RUN: %clang_cc1 -fsyntax-only -verify -triple x86_64-apple-darwin9 %s -DHAVE
-// RUN: %clang_cc1 -fsyntax-only -verify -triple i686-linux-gnu %s -DHAVE_NOT
+// RUN: %clang_cc1 -fsyntax-only -verify -triple i686-linux-gnu %s -DHAVE
+// RUN: %clang_cc1 -fsyntax-only -verify -triple sparc-unknown-linux-gnu %s -DHAVE_NOT
 // RUN: %clang_cc1 -fsyntax-only -verify -triple powerpc64-ibm-aix-xcoff %s -DHAVE
 // RUN: %clang_cc1 -fsyntax-only -verify -triple powerpc-ibm-aix-xcoff %s -DHAVE_NOT
 

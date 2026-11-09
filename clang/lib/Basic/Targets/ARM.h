@@ -181,6 +181,18 @@ public:
     return false;
   }
 
+  // __int128 on every ARM target, what -fforce-enable-int128 gives. AAPCS
+  // has no 128-bit integer and GCC has none here, so there is no ABI to
+  // match: the backend passes i128 as four words (core registers, then the
+  // stack) and expands its arithmetic inline; i128<->fp conversions call
+  // compiler-rt (__floattidf, ...). Int128Align stays 128 as with
+  // the flag, so objects built with and without it agree; the data layout
+  // says 64 (CodeGenModule's consistency check exempts 32-bit targets).
+  // Kairo's i128 lowers to it. ABI note: libc++ switches file_time_type to
+  // duration<__int128> when it sees __SIZEOF_INT128__, so a libc++ built by
+  // a compiler without this is not link-compatible.
+  bool hasInt128Type() const override { return true; }
+
   void getTargetDefinesARMV81A(const LangOptions &Opts,
                                MacroBuilder &Builder) const;
   void getTargetDefinesARMV82A(const LangOptions &Opts,

@@ -29,7 +29,7 @@ int test_ldrex(char *addr) {
   // types at the moment.
   sum += __builtin_arm_ldrex((struct Simple *)addr).a; // expected-error {{address argument to atomic builtin must be a pointer to}}
 
-  sum += __builtin_arm_ldrex((__int128 *)addr); // expected-error {{__int128 is not supported on this target}} expected-error {{address argument to load or store exclusive builtin must be a pointer to 1,2,4 or 8 byte type}}
+  sum += __builtin_arm_ldrex((__int128 *)addr); // expected-error {{address argument to load or store exclusive builtin must be a pointer to 1,2,4 or 8 byte type}}
 
   __builtin_arm_ldrex(); // expected-error {{too few arguments to function call}}
   __builtin_arm_ldrex(1, 2); // expected-error {{too many arguments to function call}}
@@ -56,7 +56,7 @@ int test_strex(char *addr) {
   res |= __builtin_arm_strex(var, (struct Simple **)addr); // expected-error {{passing 'struct Simple' to parameter of incompatible type 'struct Simple *'}}
   res |= __builtin_arm_strex(&var, (struct Simple **)addr).a; // expected-error {{is not a structure or union}}
 
-  res |= __builtin_arm_strex(1, (__int128 *)addr); // expected-error {{__int128 is not supported on this target}} expected-error {{address argument to load or store exclusive builtin must be a pointer to 1,2,4 or 8 byte type}}
+  res |= __builtin_arm_strex(1, (__int128 *)addr); // expected-error {{address argument to load or store exclusive builtin must be a pointer to 1,2,4 or 8 byte type}}
 
   __builtin_arm_strex(1); // expected-error {{too few arguments to function call}}
   __builtin_arm_strex(1, 2, 3); // expected-error {{too many arguments to function call}}
@@ -80,7 +80,7 @@ int test_ldrexd(char *addr) {
   // types at the moment.
   sum += __builtin_arm_ldrexd((struct Simple *)addr).a; // expected-error {{address argument to atomic builtin must be a pointer to}}
 
-  sum += __builtin_arm_ldrexd((__int128 *)addr); // expected-error {{__int128 is not supported on this target}} expected-error {{address argument to load or store exclusive builtin must be a pointer to 8 byte type}}
+  sum += __builtin_arm_ldrexd((__int128 *)addr); // expected-error {{address argument to load or store exclusive builtin must be a pointer to 8 byte type}}
 
   __builtin_arm_ldrexd(); // expected-error {{too few arguments to function call}}
   __builtin_arm_ldrexd(1, 2); // expected-error {{too many arguments to function call}}
@@ -107,7 +107,7 @@ int test_strexd(char *addr) {
   res |= __builtin_arm_strexd(var, (struct Simple **)addr); // expected-error {{passing 'struct Simple' to parameter of incompatible type 'struct Simple *'}} expected-error {{address argument to load or store exclusive builtin must be a pointer to 8 byte type}}
   res |= __builtin_arm_strexd(&var, (struct Simple **)addr).a; // expected-error {{is not a structure or union}} expected-error {{address argument to load or store exclusive builtin must be a pointer to 8 byte type}}
 
-  res |= __builtin_arm_strexd(1, (__int128 *)addr); // expected-error {{__int128 is not supported on this target}} expected-error {{address argument to load or store exclusive builtin must be a pointer to 8 byte type}}
+  res |= __builtin_arm_strexd(1, (__int128 *)addr); // expected-error {{address argument to load or store exclusive builtin must be a pointer to 8 byte type}}
 
   __builtin_arm_strexd(1); // expected-error {{too few arguments to function call}}
   __builtin_arm_strexd(1, 2, 3); // expected-error {{too many arguments to function call}}
@@ -131,7 +131,7 @@ int test_ldaex(char *addr) {
   // types at the moment.
   sum += __builtin_arm_ldaex((struct Simple *)addr).a; // expected-error {{address argument to atomic builtin must be a pointer to}}
 
-  sum += __builtin_arm_ldaex((__int128 *)addr); // expected-error {{__int128 is not supported on this target}} expected-error {{address argument to load or store exclusive builtin must be a pointer to 1,2,4 or 8 byte type}}
+  sum += __builtin_arm_ldaex((__int128 *)addr); // expected-error {{address argument to load or store exclusive builtin must be a pointer to 1,2,4 or 8 byte type}}
 
   __builtin_arm_ldaex(); // expected-error {{too few arguments to function call}}
   __builtin_arm_ldaex(1, 2); // expected-error {{too many arguments to function call}}
@@ -158,7 +158,7 @@ int test_stlex(char *addr) {
   res |= __builtin_arm_stlex(var, (struct Simple **)addr); // expected-error {{passing 'struct Simple' to parameter of incompatible type 'struct Simple *'}}
   res |= __builtin_arm_stlex(&var, (struct Simple **)addr).a; // expected-error {{is not a structure or union}}
 
-  res |= __builtin_arm_stlex(1, (__int128 *)addr); // expected-error {{__int128 is not supported on this target}} expected-error {{address argument to load or store exclusive builtin must be a pointer to 1,2,4 or 8 byte type}}
+  res |= __builtin_arm_stlex(1, (__int128 *)addr); // expected-error {{address argument to load or store exclusive builtin must be a pointer to 1,2,4 or 8 byte type}}
 
   __builtin_arm_stlex(1); // expected-error {{too few arguments to function call}}
   __builtin_arm_stlex(1, 2, 3); // expected-error {{too many arguments to function call}}

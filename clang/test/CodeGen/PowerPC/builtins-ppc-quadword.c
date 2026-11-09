@@ -6,8 +6,9 @@
 // RUN: -triple powerpc64le-unknown-unknown -emit-llvm %s -o - \
 // RUN: | FileCheck %s -check-prefix=CHECK-LE
 
-// RUN: not %clang_cc1 -target-feature +altivec -triple powerpc-unknown-unknown \
-// RUN: -emit-llvm %s -o - 2>&1 | FileCheck %s -check-prefix=CHECK-PPC
+// The CHECK-PPC lines below were for 32-bit PowerPC without __int128; this
+// fork gives 32-bit PowerPC __int128 (PPC32TargetInfo::hasInt128Type), so the
+// run that checked them is gone and they are inert.
 #include <altivec.h>
 
 // CHECK-PPC: error: __int128 is not supported on this target

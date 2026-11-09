@@ -367,7 +367,10 @@ static void checkDataLayoutConsistency(const TargetInfo &Target,
     Check("long long", llvm::Type::getIntNTy(Context, Target.LongLongWidth),
           Target.LongLongAlign);
   // FIXME: There are int128 alignment mismatches on multiple targets.
+  // 32-bit targets get __int128 as -fforce-enable-int128 would (this fork),
+  // with its Int128Align of 128 against a data layout that has no i128 entry.
   if (Target.hasInt128Type() && !Target.getTargetOpts().ForceEnableInt128 &&
+      Target.getPointerWidth(LangAS::Default) >= 64 &&
       !Triple.isAMDGPU() && !Triple.isSPIRV() &&
       Triple.getArch() != llvm::Triple::ve)
     Check("__int128", llvm::Type::getIntNTy(Context, 128), Target.Int128Align);

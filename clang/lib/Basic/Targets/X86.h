@@ -473,6 +473,16 @@ public:
     MaxAtomicInlineWidth = 32;
   }
 
+  // __int128 as on x86_64, what -fforce-enable-int128 gives: Int128Align
+  // 128 matches the i386 data layout's i128:128. The backend expands i128
+  // arithmetic inline (division through ExpandLargeDivRem); i128<->fp
+  // conversions call compiler-rt (__floattidf, ...), which has them once
+  // __SIZEOF_INT128__ is defined. Kairo's i128 lowers to it. ABI note:
+  // libc++ switches file_time_type to duration<__int128> when it sees
+  // __SIZEOF_INT128__, so a libc++ built by a compiler without this is not
+  // link-compatible.
+  bool hasInt128Type() const override { return true; }
+
   BuiltinVaListKind getBuiltinVaListKind() const override {
     return TargetInfo::CharPtrBuiltinVaList;
   }

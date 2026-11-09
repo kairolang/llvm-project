@@ -1030,8 +1030,17 @@ else ()
 
       # For RISCV32 and 32-bit SPARC, we must force enable int128 for compiling long
       # double routines.
+      # This fork's clang has __int128 on i386, ARM, RV32, 32-bit PowerPC and
+      # MIPS o32 by default. Every one of these backends calls compiler-rt for
+      # i128<->fp conversions (__floattidf, __fixdfti, ...), and PowerPC and
+      # MIPS also for division (__divti3, __umodti3). The ti builtins exist
+      # only under CRT_HAS_128BIT (__SIZEOF_INT128__), so force the type for
+      # these arches too: the library then has them even when an older clang
+      # builds it.
       if (COMPILER_RT_ENABLE_SOFTWARE_INT128 OR ("${arch}" MATCHES "riscv32|sparc$"
-        AND NOT CMAKE_COMPILER_IS_GNUCC))
+        AND NOT CMAKE_COMPILER_IS_GNUCC) OR
+        ("${arch}" MATCHES "^(i386|i686|arm.*|thumb.*|powerpc|powerpcspe|mips|mipsel)$"
+        AND CMAKE_C_COMPILER_ID MATCHES "Clang"))
         list(APPEND BUILTIN_CFLAGS_${arch} -fforce-enable-int128)
       endif()
 

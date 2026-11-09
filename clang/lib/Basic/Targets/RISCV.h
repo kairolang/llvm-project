@@ -202,6 +202,13 @@ public:
     if (ISAInfo->hasExtension("zalrsc"))
       MaxAtomicInlineWidth = 32;
   }
+
+  // __int128 on RV32, what -fforce-enable-int128 gives (compiler-rt's
+  // RV32 builtins already build with that flag). The psABI rule for
+  // scalars wider than 2*XLEN passes it by reference; the backend expands
+  // its arithmetic inline and calls compiler-rt for i128<->fp conversions.
+  // Kairo's i128 lowers to it.
+  bool hasInt128Type() const override { return true; }
 };
 class LLVM_LIBRARY_VISIBILITY RISCV64TargetInfo : public RISCVTargetInfo {
 public:

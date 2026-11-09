@@ -1,6 +1,6 @@
-// RUN: %clang_cc1 %s -verify=expected,fp80,noi128 -fgnuc-version=4.2.1 -ffreestanding \
+// RUN: %clang_cc1 %s -verify=expected,fp80 -fgnuc-version=4.2.1 -ffreestanding \
 // RUN:   -Wno-default-const-init-unsafe -fsyntax-only -triple=i686-linux-gnu -std=c11
-// RUN: %clang_cc1 %s -verify=expected,noi128 -fgnuc-version=4.2.1 -ffreestanding \
+// RUN: %clang_cc1 %s -verify=expected -fgnuc-version=4.2.1 -ffreestanding \
 // RUN:   -Wno-default-const-init-unsafe -fsyntax-only -triple=i686-linux-android -std=c11
 // RUN: %clang_cc1 %s -verify -fgnuc-version=4.2.1 -ffreestanding \
 // RUN:   -Wno-default-const-init-unsafe -fsyntax-only -triple=powerpc64-linux-gnu -std=c11
@@ -73,7 +73,6 @@ _Static_assert(atomic_is_lock_free((atomic_short*)0), "");
 _Static_assert(atomic_is_lock_free((atomic_int*)0), "");
 _Static_assert(atomic_is_lock_free((atomic_long*)0), "");
 #ifndef PPC64_PWR8
-// noi128-error@+1 {{__int128 is not supported on this target}}
 _Static_assert(atomic_is_lock_free((_Atomic(__int128)*)0), ""); // expected-error {{not an integral constant expression}}
 #else
 _Static_assert(atomic_is_lock_free((_Atomic(__int128)*)0), ""); // expected-no-error

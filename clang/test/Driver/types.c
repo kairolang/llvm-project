@@ -1,12 +1,12 @@
 // Check whether __int128_t and __uint128_t are supported.
 
-// RUN: not %clang -c --target=riscv32-unknown-linux-gnu -fsyntax-only %s \
+// RUN: not %clang -c --target=sparc-unknown-linux-gnu -fsyntax-only %s \
 // RUN: 2>&1 | FileCheck %s
 
-// RUN: %clang -c --target=riscv32-unknown-linux-gnu -fsyntax-only %s \
+// RUN: %clang -c --target=sparc-unknown-linux-gnu -fsyntax-only %s \
 // RUN: -fno-force-enable-int128 -fforce-enable-int128
 
-// RUN: not %clang -c --target=riscv32-unknown-linux-gnu -fsyntax-only %s \
+// RUN: not %clang -c --target=sparc-unknown-linux-gnu -fsyntax-only %s \
 // RUN: -fforce-enable-int128 -fno-force-enable-int128
 
 // RUN: not %clang -c --target=powerpc-ibm-aix -fsyntax-only %s \

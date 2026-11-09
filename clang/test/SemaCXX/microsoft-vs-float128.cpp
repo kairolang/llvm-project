@@ -1,5 +1,8 @@
 // RUN: %clang_cc1 -triple x86_64-linux-gnu -fms-compatibility -fms-extensions -fsyntax-only -verify -std=c++11 %s
-// RUN: %clang_cc1 -triple i686-pc-win32 -fms-compatibility -fms-extensions -fsyntax-only -verify -std=c++11 -DMS %s
+// In this fork Win32 has __float128 (MicrosoftMangle spells it) and
+// __int128 (X86_32TargetInfo::hasInt128Type), so it takes the non-MS branch;
+// the MS branch has no run left.
+// RUN: %clang_cc1 -triple i686-pc-win32 -fms-compatibility -fms-extensions -fsyntax-only -verify -std=c++11 %s
 
 template <bool> struct enable_if {};
 template<> struct enable_if<true> { typedef void type; };

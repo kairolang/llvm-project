@@ -428,6 +428,16 @@ public:
   std::pair<unsigned, unsigned> hardwareInterferenceSizes() const override {
     return std::make_pair(32, 32);
   }
+
+  // __int128 on 32-bit PowerPC (not AIX, which keeps its own rule), what
+  // -fforce-enable-int128 gives. GCC has none here, so there is no ABI to
+  // match: the backend passes i128 in four GPRs or on the stack. Division
+  // and i128<->fp conversion are libcalls (__divti3, __floattidf, ...), which
+  // compiler-rt builds once __SIZEOF_INT128__ is defined (CRT_HAS_128BIT).
+  // Kairo's i128 lowers to it.
+  bool hasInt128Type() const override {
+    return !getTriple().isOSAIX() || TargetInfo::hasInt128Type();
+  }
 };
 
 // Note: ABI differences may eventually require us to have a separate
